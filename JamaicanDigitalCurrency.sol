@@ -5,8 +5,9 @@ import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 
 contract ExchangeRate is ChainlinkClient {
     using Chainlink for Chainlink.Request;
-  
-    uint256 public EURtoJMD;
+    
+    //  init value
+    uint256 public EURtoJMD = 75 * 10**10;
     
     address private oracle;
     bytes32 private jobId;
@@ -172,11 +173,11 @@ contract JMD is DigitalCurrency, ExchangeRate{
     }
 
     function convertToEUR(EUR _contract, uint256 amount) external isSolvent(msg.sender, amount){
+        requestEURtoJMD();
         uint256 amountToSend = amount / (EURtoJMD / (10**10));
         
         require (amountToSend > 0, "Not enough JMD");
         require(_contract.balanceOf(_contract.getOwner()) >= amountToSend, "Not enough EUR");
-        requestEURtoJMD();
 
         balances[msg.sender] -= amount;
         _contract.transfer(_contract.getOwner(), msg.sender, amountToSend);
@@ -189,11 +190,11 @@ contract EUR is DigitalCurrency, ExchangeRate{
     }
 
     function convertToJMD(JMD _contract, uint256 amount) external isSolvent(msg.sender, amount){
+        requestEURtoJMD();
         uint256 amountToSend = amount * (EURtoJMD / (10**10));
 
         require (amountToSend > 0, "Not enough EUR");
         require(_contract.balanceOf(_contract.getOwner()) >= amountToSend, "Not enough JMD");
-        requestEURtoJMD();
 
         balances[msg.sender] -= amount;
         _contract.transfer(_contract.getOwner(), msg.sender, amountToSend);
