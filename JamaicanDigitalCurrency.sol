@@ -204,7 +204,7 @@ contract DigitalCurrency{
 }
 
 contract JMD is DigitalCurrency, ExchangeRate{
-    constructor() DigitalCurrency(){
+    constructor() DigitalCurrency() ExchangeRate(){
         symbol = "JMD";
     }
 
@@ -221,7 +221,7 @@ contract JMD is DigitalCurrency, ExchangeRate{
 }
 
 contract EUR is DigitalCurrency, ExchangeRate{
-    constructor() DigitalCurrency(){
+    constructor() DigitalCurrency() ExchangeRate(){
         symbol = "EUR";
     }
 
