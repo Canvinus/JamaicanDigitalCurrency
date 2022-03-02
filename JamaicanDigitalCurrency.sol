@@ -72,16 +72,16 @@ library SafeMath {
 contract DigitalCurrency{
     //  Using SafeMath library
     using SafeMath for uint256;
-
     //  symbol of currency
     string public symbol;
     //  Total supply private field
     uint256 _totalSupply;
     //  Owner private field
     address _owner;
-
     //  Balances
     mapping (address => uint256) balances;
+    //  Array of connected currencies
+    address[] contracts;
 
     //  Requires msg.sender to be an owner
     modifier isOwner() {
@@ -103,6 +103,8 @@ contract DigitalCurrency{
     //  When owner is changed
     event OwnerChanged(address oldOwner, address newOwner);
 
+    event ContractAdded(address _contract);
+
     //  Sets owner
     function _setOwner(address newOwner) internal{
         _owner = newOwner;
@@ -123,9 +125,13 @@ contract DigitalCurrency{
     }
 
     //  Gets the balance of specific address
-    //  Only callable by an owner
+    //  Only callable by an owner or contract
     function balanceOf(address _address) external isOwner view returns(uint256){
         return balances[_address];
+    }
+
+    function balanceOfOwner() external view returns(uint256){
+        return balances[getOwner()];
     }
 
     //  Gets the balance of msg.sender
@@ -158,8 +164,38 @@ contract DigitalCurrency{
         emit Sent(msg.sender, receiver, amount);
     }
 
+    function contractsContains(address element) internal returns(bool){
+        bool doesListContainElement = false;
+        
+        for (uint i = 0; i < contracts.length; i++) {
+            if (element == contracts[i]) {
+                doesListContainElement = true;
+            }
+        }
+
+        return doesListContainElement;
+    }
+
+    //  Adds contract to array
+    function addContract(address _contract) external isOwner{
+        contracts.push(_contract);
+    }
+
+    //  Removes contract from array
+    function removeContract(uint index) external isOwner{
+        contracts[index] = contracts[contracts.length - 1];
+        contracts.pop();
+    }
+
+    //  Gets contracts from array
+    function getContracts() external view returns(address[] memory){
+        return contracts;
+    }
+
     //  Transfers tokens to specific address from msg.sender's address
     function transfer(address from, address to, uint256 amount) public isSolvent(from, amount){
+        require(contractsContains(msg.sender) == true);
+
         balances[from] = balances[from].sub(amount);
         balances[to] = balances[to].add(amount);
 
@@ -168,7 +204,7 @@ contract DigitalCurrency{
 }
 
 contract JMD is DigitalCurrency, ExchangeRate{
-    constructor() DigitalCurrency() ExchangeRate(){
+    constructor() DigitalCurrency(){
         symbol = "JMD";
     }
 
@@ -177,7 +213,7 @@ contract JMD is DigitalCurrency, ExchangeRate{
         uint256 amountToSend = amount / (EURtoJMD / (10**10));
         
         require (amountToSend > 0, "Not enough JMD");
-        require(_contract.balanceOf(_contract.getOwner()) >= amountToSend, "Not enough EUR");
+        require(_contract.balanceOfOwner() >= amountToSend, "Not enough EUR");
 
         balances[msg.sender] -= amount;
         _contract.transfer(_contract.getOwner(), msg.sender, amountToSend);
@@ -185,7 +221,7 @@ contract JMD is DigitalCurrency, ExchangeRate{
 }
 
 contract EUR is DigitalCurrency, ExchangeRate{
-    constructor() DigitalCurrency() ExchangeRate(){
+    constructor() DigitalCurrency(){
         symbol = "EUR";
     }
 
@@ -194,7 +230,7 @@ contract EUR is DigitalCurrency, ExchangeRate{
         uint256 amountToSend = amount * (EURtoJMD / (10**10));
 
         require (amountToSend > 0, "Not enough EUR");
-        require(_contract.balanceOf(_contract.getOwner()) >= amountToSend, "Not enough JMD");
+        require(_contract.balanceOfOwner() >= amountToSend, "Not enough JMD");
 
         balances[msg.sender] -= amount;
         _contract.transfer(_contract.getOwner(), msg.sender, amountToSend);
