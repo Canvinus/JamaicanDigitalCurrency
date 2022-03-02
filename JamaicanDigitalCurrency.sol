@@ -48,12 +48,6 @@ contract ExchangeRate is ChainlinkClient {
     {
         EURtoJMD = _EURtoJMD;
     }
-
-    function withdrawLink() external {
-        LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
-
-        require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
-    }
 }
 
 library SafeMath {
@@ -69,7 +63,7 @@ library SafeMath {
     }
 }
 
-contract DigitalCurrency{
+contract DigitalCurrency is ExchangeRate{
     //  Using SafeMath library
     using SafeMath for uint256;
     //  symbol of currency
@@ -201,9 +195,15 @@ contract DigitalCurrency{
 
         emit Sent(from, to, amount);
     }
+
+    function withdrawLink() external isOwner{
+        LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+
+        require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
+    }
 }
 
-contract JMD is DigitalCurrency, ExchangeRate{
+contract JMD is DigitalCurrency{
     constructor() DigitalCurrency() ExchangeRate(){
         symbol = "JMD";
     }
@@ -220,7 +220,7 @@ contract JMD is DigitalCurrency, ExchangeRate{
     }
 }
 
-contract EUR is DigitalCurrency, ExchangeRate{
+contract EUR is DigitalCurrency{
     constructor() DigitalCurrency() ExchangeRate(){
         symbol = "EUR";
     }
