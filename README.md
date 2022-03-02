@@ -13,11 +13,11 @@ using LINK to fulfill requests
 
 #### contract DigitalCurrency contains main logic
 
-#### contract JMD is inherited from ExchangeRate and DigitalCurrency deployed in Kovan test network. Created to manipulate with JDR: https://kovan.etherscan.io/address/0x412828551AE0b19526689a47Ab90244f996765C7
+#### contract JMD is inherited from ExchangeRate and DigitalCurrency deployed in Kovan test network. Created to manipulate with JDR: https://kovan.etherscan.io/address/0x3c2460b42e37D0d9514117598Ea3E6836bC978cC
 
-#### contract EUR is inherited from ExchangeRate and DigitalCurrency deployed in Kovan test network. Created to manipulate with EUR: https://kovan.etherscan.io/address/0x412828551AE0b19526689a47Ab90244f996765C7
+#### contract EUR is inherited from ExchangeRate and DigitalCurrency deployed in Kovan test network. Created to manipulate with EUR: https://kovan.etherscan.io/address/0x57aE897c635b85C32f6E32736710c9D4d0beCf6A
 
-![image](https://user-images.githubusercontent.com/44225021/156317479-abd77d45-a5aa-4034-8715-dffabc1a183e.png)
+![image](https://user-images.githubusercontent.com/44225021/156320484-55328c84-201b-48d0-bf5a-839d358a48e0.png)
 
 * addContract - adds contract to another digital currency
 * removeContract - removes contract
@@ -34,6 +34,6 @@ using LINK to fulfill requests
 * transfer - transfer from to. Only called by another approved contract
 * transferTo - transfer from msg.sender to
 * withdrawLink - withdraws LINK from contract
-* EURtoJMD - exchange rates field
+* EURtoJMD - exchange rates * 10^18 to keep decimals
 * symbol - USD / JMD. Symbol of Digital Currency
 * totalSupply - total supply
