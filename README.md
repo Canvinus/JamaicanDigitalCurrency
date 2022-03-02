@@ -17,19 +17,23 @@ using LINK to fulfill requests
 
 #### contract EUR is inherited from ExchangeRate and DigitalCurrency deployed in Kovan test network. Created to manipulate with EUR: https://kovan.etherscan.io/address/0x412828551AE0b19526689a47Ab90244f996765C7
 
-![image](https://user-images.githubusercontent.com/44225021/156231550-9f4d8e73-624f-4303-b9bc-06a09515fbe8.png)
+![image](https://user-images.githubusercontent.com/44225021/156317479-abd77d45-a5aa-4034-8715-dffabc1a183e.png)
 
-* changeOwner - changes the owner of smart contract
+* addContract - adds contract to another digital currency
+* removeContract - removes contract
+* getContracts - gets contracts
+* balanceOfOwner - balance of owner
+* balanceOf - balance of specific address. Only called by an owner
+* myBalance - balance of msg.sender
+* changeOwner - changes the owner of smart contract. Only called by an owner
+* getOwner - returns owner
 * convertToEUR / convertToJMD - converts tokens from one contract to another using EUR / JMD change rates from ExchangeRate contract
 * fulfill - used by ChainLink to fulfill the api request
-* mint - mint new tokens.
-* requestEURtoJMD - api call by ChainLink
-* transfer - transfer from to
+* mint - mint new tokens
+* requestEURtoJMD - api call by ChainLink. Called on each convert
+* transfer - transfer from to. Only called by another approved contract
 * transferTo - transfer from msg.sender to
 * withdrawLink - withdraws LINK from contract
-* balanceOf - fetches balance of specific address
 * EURtoJMD - exchange rates field
-* getOwner - returns owner
-* myBalance - fetches balance of msg.sender
 * symbol - USD / JMD. Symbol of Digital Currency
 * totalSupply - total supply
