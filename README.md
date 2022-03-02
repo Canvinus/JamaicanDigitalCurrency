@@ -11,7 +11,7 @@ This contract is using ChainLink to fetch change rates for pair EUR / JMD from A
 
 using LINK to fulfill requests
 
-#### contract DigitalCurrency is ingerited from ExchangeRate contains main logic
+#### contract DigitalCurrency is inherited from ExchangeRate contains main logic
 
 #### contract JMD is inherited from DigitalCurrency deployed in Kovan test network. Created to manipulate with JDR: https://kovan.etherscan.io/address/0x3c2460b42e37D0d9514117598Ea3E6836bC978cC
 
