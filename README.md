@@ -34,6 +34,6 @@ using LINK to fulfill requests
 * transfer - transfer from to. Only called by another approved contract
 * transferTo - transfer from msg.sender to
 * withdrawLink - withdraws LINK from contract
-* EURtoJMD - exchange rates * 10^18 to keep decimals
+* EURtoJMD - exchange rates * 10^10 to keep decimals
 * symbol - USD / JMD. Symbol of Digital Currency
 * totalSupply - total supply
